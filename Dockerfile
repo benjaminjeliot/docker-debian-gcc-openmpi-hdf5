@@ -12,7 +12,7 @@ RUN apt-get update \
     python3 \
     python3-pytest \
     googletest \
-    libopenmpi3-dev \
+    libopenmpi-dev \
     libhdf5-openmpi-103 \
  && rm -rf /var/lib/apt/lists/*
 
