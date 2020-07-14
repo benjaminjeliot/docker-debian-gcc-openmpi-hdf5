@@ -7,18 +7,20 @@ RUN apt-get update \
     gcc \
     g++ \
     make \
+    ca-certificates \
     wget \
     cmake \
     python3 \
     python3-pytest \
     googletest \
     libopenmpi-dev \
-    libhdf5-openmpi-103 \
+    libhdf5-openmpi-dev \
  && rm -rf /var/lib/apt/lists/*
 
 # Build and install Google Test
 RUN mkdir gtest-build \
  && cd gtest-build \
+ && export CXX=g++ CC=gcc \
  && cmake \
     -DBUILD_GTEST:BOOL=ON \
     -DCMAKE_INSTALL_PREFIX:PATH=/usr/local \
@@ -27,4 +29,19 @@ RUN mkdir gtest-build \
  && cmake --build . --target install \
  && cd .. \
  && rm -rf gtest-build
+
+# Build and install TyphonIO
+RUN wget https://github.com/UK-MAC/typhonio/archive/v1.6_CMake.tar.gz \
+ && tar -xf v1.6_CMake.tar.gz \
+ && mkdir typhonio-build \
+ && cd typhonio-build \
+ && export CXX=g++ CC=gcc \
+ && cmake \
+    -DCMAKE_INSTALL_PREFIX:PATH=/usr/local \
+    -DHDF5_ROOT:PATH=/usr \
+    ../typhonio-1.6_CMake \
+ && cmake --build . \
+ && cmake --build . --target install \
+ && cd .. \
+ && rm -rf v1.6_CMake.tar.gz typhonio-1.6_CMake typhonio-build
 
