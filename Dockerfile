@@ -6,16 +6,21 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     gcc \
     g++ \
+    gfortran \
     make \
     ca-certificates \
     wget \
     cmake \
     python3 \
+    python3-pip \
     python3-pytest \
     googletest \
     libopenmpi-dev \
     libhdf5-openmpi-dev \
  && rm -rf /var/lib/apt/lists/*
+
+# Install cpplint
+RUN pip3 install cpplint
 
 # Build and install Google Test
 RUN mkdir gtest-build \
@@ -38,7 +43,6 @@ RUN wget https://github.com/UK-MAC/typhonio/archive/v1.6_CMake.tar.gz \
  && export CXX=g++ CC=gcc \
  && cmake \
     -DCMAKE_INSTALL_PREFIX:PATH=/usr/local \
-    -DHDF5_ROOT:PATH=/usr \
     ../typhonio-1.6_CMake \
  && cmake --build . \
  && cmake --build . --target install \
